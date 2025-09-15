@@ -1,41 +1,34 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Todo } from './todo.entity';
 
 @Injectable()
 export class TodoService {
-  private todos: Todo[] = [];
-  private idCounter = 1;
+  constructor(
+    @InjectRepository(Todo)
+    private todoRepository: Repository<Todo>,
+  ) {}
 
-  findAll(): Todo[] {
-    return this.todos;
+  findAll(): Promise<Todo[]> {
+    return this.todoRepository.find();
   }
 
-  findOne(id: number): Todo {
-    const todo = this.todos.find(todo => todo.id === id);
-    if (!todo) {
-      throw new NotFoundException(`Todo dengan id ${id} tidak ditemukan`);
-    }
-    return todo;
+  findOne(id: number): Promise<Todo | null> {
+    return this.todoRepository.findOneBy({ id });
   }
 
-  create(title: string, description?: string): Todo {
-    const newTodo: Todo = {
-      id: this.idCounter++,
-      title,
-      description,
-      isDone: false,
-    };
-    this.todos.push(newTodo);
-    return newTodo;
+  create(title: string, description?: string): Promise<Todo> {
+    const todo = this.todoRepository.create({ title, description });
+    return this.todoRepository.save(todo);
   }
 
-  update(id: number, updateData: Partial<Todo>): Todo {
-    const todo = this.findOne(id); // ✅ aman, karena sudah pasti ada
-    Object.assign(todo, updateData);
-    return todo;
+  async update(id: number, data: Partial<Todo>): Promise<Todo | null> {
+    await this.todoRepository.update(id, data);
+    return this.todoRepository.findOneBy({ id });
   }
 
-  remove(id: number): void {
-    this.todos = this.todos.filter(todo => todo.id !== id);
+  async remove(id: number): Promise<void> {
+    await this.todoRepository.delete(id);
   }
 }

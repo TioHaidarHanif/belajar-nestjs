@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 import { TodoService } from './todo.service';
 import { Todo } from './todo.entity';
 
@@ -7,30 +7,38 @@ export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   @Get()
-  findAll(): Todo[] {
+  findAll(): Promise<Todo[]> {
     return this.todoService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Todo {
-    return this.todoService.findOne(Number(id));
+  async findOne(@Param('id') id: string): Promise<Todo> {
+    const todo = await this.todoService.findOne(Number(id));
+    if (!todo) {
+      throw new Error('Todo not found');
+    }
+    return todo;
   }
 
   @Post()
-  create(@Body() body: { title: string; description?: string }): Todo {
+  create(@Body() body: { title: string; description?: string }): Promise<Todo> {
     return this.todoService.create(body.title, body.description);
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id') id: string,
-    @Body() body: { title?: string; description?: string; isDone?: boolean },
-  ): Todo {
-    return this.todoService.update(Number(id), body);
+    @Body() body: Partial<Todo>,
+  ): Promise<Todo> {
+    const todo = await this.todoService.update(Number(id), body);
+    if (!todo) {
+      throw new Error('Todo not found');
+    }
+    return todo;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): void {
+  remove(@Param('id') id: string): Promise<void> {
     return this.todoService.remove(Number(id));
   }
 }
