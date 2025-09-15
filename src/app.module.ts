@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { TodoModule } from './todo/todo.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 
 @Module({
@@ -18,7 +19,8 @@ import { AuthModule } from './auth/auth.module';
     }),
     TodoModule,
     UserModule,
-    AuthModule  
+    AuthModule,
+    PrometheusModule.register(),
   ],
   controllers: [AppController],
   providers: [AppService],
