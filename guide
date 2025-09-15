@@ -1,0 +1,105 @@
+Berikut contoh penggunaan semua fitur utama API Anda menggunakan curl, dengan JWT token yang Anda berikan:
+
+**Ganti data JSON sesuai kebutuhan.**
+
+---
+
+### 1. Register User
+```bash
+curl -X POST http://localhost:3000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"user2","password":"pass"}'
+```
+
+### 2. Login User
+```bash
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"user1","password":"pass"}'
+```
+
+### 3. Get Profile (Butuh JWT)
+```bash
+curl -X GET http://localhost:3000/auth/profile \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwic3ViIjoxLCJpYXQiOjE3NTc5MTUzOTUsImV4cCI6MTc1NzkxODk5NX0.i_U28lrnqYxtjIdGeJ_hVjREDMq3pUmMWpOjQ6YQYzc"
+```
+
+---
+
+## TODO (semua endpoint butuh JWT)
+
+### 4. List Todo
+```bash
+curl -X GET http://localhost:3000/todos \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwic3ViIjoxLCJpYXQiOjE3NTc5MTUzOTUsImV4cCI6MTc1NzkxODk5NX0.i_U28lrnqYxtjIdGeJ_hVjREDMq3pUmMWpOjQ6YQYzc"
+```
+
+### 5. Create Todo
+```bash
+curl -X POST http://localhost:3000/todos \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwic3ViIjoxLCJpYXQiOjE3NTc5MTUzOTUsImV4cCI6MTc1NzkxODk5NX0.i_U28lrnqYxtjIdGeJ_hVjREDMq3pUmMWpOjQ6YQYzc" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Belajar NestJS","description":"Latihan membuat todo"}'
+```
+
+### 6. Get Todo by ID
+```bash
+curl -X GET http://localhost:3000/todos/1 \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwic3ViIjoxLCJpYXQiOjE3NTc5MTUzOTUsImV4cCI6MTc1NzkxODk5NX0.i_U28lrnqYxtjIdGeJ_hVjREDMq3pUmMWpOjQ6YQYzc"
+```
+
+### 7. Update Todo
+```bash
+curl -X PATCH http://localhost:3000/todos/1 \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwic3ViIjoxLCJpYXQiOjE3NTc5MTUzOTUsImV4cCI6MTc1NzkxODk5NX0.i_U28lrnqYxtjIdGeJ_hVjREDMq3pUmMWpOjQ6YQYzc" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Update Judul"}'
+```
+
+### 8. Delete Todo
+```bash
+curl -X DELETE http://localhost:3000/todos/1 \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwic3ViIjoxLCJpYXQiOjE3NTc5MTUzOTUsImV4cCI6MTc1NzkxODk5NX0.i_U28lrnqYxtjIdGeJ_hVjREDMq3pUmMWpOjQ6YQYzc"
+```
+
+---
+
+## ARTICLE (semua endpoint butuh JWT)
+
+### 9. List Article
+```bash
+curl -X GET http://localhost:3000/articles \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwic3ViIjoxLCJpYXQiOjE3NTc5MTUzOTUsImV4cCI6MTc1NzkxODk5NX0.i_U28lrnqYxtjIdGeJ_hVjREDMq3pUmMWpOjQ6YQYzc"
+```
+
+### 10. Create Article
+```bash
+curl -X POST http://localhost:3000/articles \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwic3ViIjoxLCJpYXQiOjE3NTc5MTUzOTUsImV4cCI6MTc1NzkxODk5NX0.i_U28lrnqYxtjIdGeJ_hVjREDMq3pUmMWpOjQ6YQYzc" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Judul Artikel","content":"Isi artikel"}'
+```
+
+### 11. Get Article by ID
+```bash
+curl -X GET http://localhost:3000/articles/1 \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwic3ViIjoxLCJpYXQiOjE3NTc5MTUzOTUsImV4cCI6MTc1NzkxODk5NX0.i_U28lrnqYxtjIdGeJ_hVjREDMq3pUmMWpOjQ6YQYzc"
+```
+
+### 12. Update Article
+```bash
+curl -X PATCH http://localhost:3000/articles/1 \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwic3ViIjoxLCJpYXQiOjE3NTc5MTUzOTUsImV4cCI6MTc1NzkxODk5NX0.i_U28lrnqYxtjIdGeJ_hVjREDMq3pUmMWpOjQ6YQYzc" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Update Judul Artikel"}'
+```
+
+### 13. Delete Article
+```bash
+curl -X DELETE http://localhost:3000/articles/1 \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwic3ViIjoxLCJpYXQiOjE3NTc5MTUzOTUsImV4cCI6MTc1NzkxODk5NX0.i_U28lrnqYxtjIdGeJ_hVjREDMq3pUmMWpOjQ6YQYzc"
+```
+
+---
+
+Jika ada endpoint lain yang ingin dicontohkan, silakan sebutkan!

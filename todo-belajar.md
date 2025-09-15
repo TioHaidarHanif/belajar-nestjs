@@ -1,0 +1,9 @@
+- Dependency Injection
+- Providers
+- Knsep decoreatr itu seperti apa
+- Middleware
+- Interceptors
+- Pipes
+- Filters
+- TypeORM atau prisma
+- OAuth2

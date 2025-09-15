@@ -10,20 +10,38 @@ export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   @Get()
-  findAll(): Promise<Article[]> {
-    return this.articleService.findAll();
+  async findAll(): Promise<Article[]> {
+    const articles = await this.articleService.findAll();
+    return articles.map(article => {
+      if (article.user && 'password' in article.user) {
+        const { password, ...userSafe } = article.user;
+        article.user = userSafe as any;
+      }
+      return article;
+    });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Article | null> {
-    return this.articleService.findOne(Number(id));
+  async findOne(@Param('id') id: string): Promise<Article | null> {
+    const article = await this.articleService.findOne(Number(id));
+    if (article && article.user && 'password' in article.user) {
+      const { password, ...userSafe } = article.user;
+      article.user = userSafe as any;
+    }
+    return article;
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
   create(@Body() body: { title: string; content: string }, @Req() req: Request): Promise<Article> {
     // @ts-ignore
-    return this.articleService.create(body.title, body.content, req.user);
+    return this.articleService.create(body.title, body.content, req.user).then(article => {
+      if (article.user && 'password' in article.user) {
+        const { password, ...userSafe } = article.user;
+        article.user = userSafe as any;
+      }
+      return article;
+    });
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -34,7 +52,12 @@ export class ArticleController {
     @Req() req: Request,
   ): Promise<Article | null> {
     // @ts-ignore
-    return this.articleService.update(Number(id), body, req.user);
+    const article = await this.articleService.update(Number(id), body, req.user);
+    if (article && article.user && 'password' in article.user) {
+      const { password, ...userSafe } = article.user;
+      article.user = userSafe as any;
+    }
+    return article;
   }
 
   @UseGuards(AuthGuard('jwt'))

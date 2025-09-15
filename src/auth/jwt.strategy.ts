@@ -18,6 +18,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         if (!user) {
             return null;
         }
-        return user;
+        const { password, ...result } = user;
+        console.log(result)
+        return result;
     }
 }
