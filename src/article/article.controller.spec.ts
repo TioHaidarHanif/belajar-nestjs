@@ -4,14 +4,15 @@ import { ArticleService } from './article.service';
 import { Article } from './article.entity';
 import { AuthGuard } from '@nestjs/passport';
 
-const mockUser = { id: 1, username: 'user1' };
+const mockMember = { id: 1, username: 'user1', role: 'member' };
+const mockAdmin = { id: 2, username: 'admin', role: 'admin' };
 const mockArticle: Article = {
   id: 1,
   title: 'Judul Artikel',
   content: 'Isi artikel',
   createdAt: new Date(),
   updatedAt: new Date(),
-  user: mockUser as any,
+  user: mockMember as any,
 };
 
 const mockArticleService = {
@@ -57,21 +58,34 @@ describe('ArticleController', () => {
 
   it('should create an article', async () => {
     const dto = { title: 'Judul Artikel', content: 'Isi artikel' };
-    const req = { user: mockUser } as any;
+    const req = { user: mockMember } as any;
     expect(await controller.create(dto, req)).toEqual(mockArticle);
-    expect(service.create).toHaveBeenCalledWith(dto.title, dto.content, mockUser);
+    expect(service.create).toHaveBeenCalledWith(dto.title, dto.content, mockMember);
   });
 
-  it('should update an article', async () => {
+  it('should update an article as member (own article)', async () => {
     const dto = { title: 'Baru' };
-    const req = { user: mockUser } as any;
+    const req = { user: mockMember } as any;
     expect(await controller.update('1', dto, req)).toEqual(mockArticle);
-    expect(service.update).toHaveBeenCalledWith(1, dto, mockUser);
+    expect(service.update).toHaveBeenCalledWith(1, dto, mockMember);
   });
 
-  it('should remove an article', async () => {
-    const req = { user: mockUser } as any;
+  it('should update an article as admin (any article)', async () => {
+    const dto = { title: 'Baru' };
+    const req = { user: mockAdmin } as any;
+    expect(await controller.update('1', dto, req)).toEqual(mockArticle);
+    expect(service.update).toHaveBeenCalledWith(1, dto, mockAdmin);
+  });
+
+  it('should remove an article as member (own article)', async () => {
+    const req = { user: mockMember } as any;
     expect(await controller.remove('1', req)).toEqual({ success: true });
-    expect(service.remove).toHaveBeenCalledWith(1, mockUser);
+    expect(service.remove).toHaveBeenCalledWith(1, mockMember);
+  });
+
+  it('should remove an article as admin (any article)', async () => {
+    const req = { user: mockAdmin } as any;
+    expect(await controller.remove('1', req)).toEqual({ success: true });
+    expect(service.remove).toHaveBeenCalledWith(1, mockAdmin);
   });
 });

@@ -26,14 +26,16 @@ export class ArticleService {
 
   async update(id: number, data: Partial<Article>, user: User): Promise<Article | null> {
     const article = await this.articleRepository.findOne({ where: { id }, relations: ['user'] });
-    if (!article || article.user.id !== user.id) return null;
+    if (!article) return null;
+    if (user.role !== 'admin' && article.user.id !== user.id) return null;
     await this.articleRepository.update(id, data);
     return this.articleRepository.findOneBy({ id });
   }
 
   async remove(id: number, user: User): Promise<boolean> {
     const article = await this.articleRepository.findOne({ where: { id }, relations: ['user'] });
-    if (!article || article.user.id !== user.id) return false;
+    if (!article) return false;
+    if (user.role !== 'admin' && article.user.id !== user.id) return false;
     await this.articleRepository.delete(id);
     return true;
   }

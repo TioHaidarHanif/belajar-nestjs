@@ -17,4 +17,7 @@ export class User {
   @Column({nullable: true})
   currentHashedRefreshToken?: string;
 
+  @Column({ default: 'member' })
+  role: 'admin' | 'member';
+
 }
