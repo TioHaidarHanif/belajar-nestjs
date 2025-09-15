@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -7,6 +6,7 @@ import { TodoModule } from './todo/todo.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { ArticleModule } from './article/article.module';
 
 
 @Module({
@@ -20,6 +20,7 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
     TodoModule,
     UserModule,
     AuthModule,
+    ArticleModule,
     PrometheusModule.register(),
   ],
   controllers: [AppController],
