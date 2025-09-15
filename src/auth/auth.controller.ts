@@ -3,7 +3,13 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { Counter } from 'prom-client';
 
+const authCounter = new Counter({
+    name: 'auth_requests_total',
+    help: 'Total number of authentication requests',
+    labelNames: ['perintah', 'status'],
+});
 
 @Controller('auth')
 export class AuthController {
@@ -16,6 +22,8 @@ export class AuthController {
     
     @Post('login')
     async login(@Body() loginDto: LoginDto) {
+                authCounter.inc({ perintah: 'Login brow', status: 'success' });
+
         return this.authService.login(loginDto);
     }
     @Post('refresh-token')
@@ -35,6 +43,7 @@ export class AuthController {
     @UseGuards(AuthGuard('jwt'))
     @Get('profile')
     getProfile(@Req() req) {
+        authCounter.inc({ perintah: 'Lihat profil', status: 'success' });
         return { message: 'This is the user profile', user: req.user };
     }
 
