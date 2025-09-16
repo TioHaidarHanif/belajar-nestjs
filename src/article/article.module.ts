@@ -7,10 +7,11 @@ import LoggerMiddleware from '../common/middleware/logger.middleware';
 import { LoggingInterceptor } from '../common/interceptors/logging.interceptor';
 import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
+import { ApiKeyService } from '../common/guards/api-key.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Article])],
-  providers: [ArticleService, LoggingInterceptor, TransformInterceptor, HttpExceptionFilter],
+  providers: [ArticleService, LoggingInterceptor, TransformInterceptor, HttpExceptionFilter, ApiKeyService],
   controllers: [ArticleController],
 })
 export class ArticleModule implements NestModule {

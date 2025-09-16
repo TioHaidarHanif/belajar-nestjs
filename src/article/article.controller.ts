@@ -8,9 +8,11 @@ import { ParseIntPipe } from '../common/pipes/parse-int.pipe';
 import { LoggingInterceptor } from '../common/interceptors/logging.interceptor';
 import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
+import { ApiKeyGuard } from '../common/guards/api-key.guard';
 import httpClient from '../common/http/http-client';
 
 @Controller('articles')
+@UseGuards(ApiKeyGuard)
 @UseInterceptors(LoggingInterceptor, TransformInterceptor)
 @UseFilters(HttpExceptionFilter)
 export class ArticleController {
