@@ -52,7 +52,7 @@ describe('ArticleController', () => {
   });
 
   it('should return an article by id', async () => {
-    expect(await controller.findOne('1')).toEqual(mockArticle);
+    expect(await controller.findOne(1)).toEqual(mockArticle);
     expect(service.findOne).toHaveBeenCalledWith(1);
   });
 
@@ -66,26 +66,26 @@ describe('ArticleController', () => {
   it('should update an article as member (own article)', async () => {
     const dto = { title: 'Baru' };
     const req = { user: mockMember } as any;
-    expect(await controller.update('1', dto, req)).toEqual(mockArticle);
+    expect(await controller.update(1, dto, req)).toEqual(mockArticle);
     expect(service.update).toHaveBeenCalledWith(1, dto, mockMember);
   });
 
   it('should update an article as admin (any article)', async () => {
     const dto = { title: 'Baru' };
     const req = { user: mockAdmin } as any;
-    expect(await controller.update('1', dto, req)).toEqual(mockArticle);
+    expect(await controller.update(1, dto, req)).toEqual(mockArticle);
     expect(service.update).toHaveBeenCalledWith(1, dto, mockAdmin);
   });
 
   it('should remove an article as member (own article)', async () => {
     const req = { user: mockMember } as any;
-    expect(await controller.remove('1', req)).toEqual({ success: true });
+    expect(await controller.remove(1, req)).toEqual({ success: true });
     expect(service.remove).toHaveBeenCalledWith(1, mockMember);
   });
 
   it('should remove an article as admin (any article)', async () => {
     const req = { user: mockAdmin } as any;
-    expect(await controller.remove('1', req)).toEqual({ success: true });
+    expect(await controller.remove(1, req)).toEqual({ success: true });
     expect(service.remove).toHaveBeenCalledWith(1, mockAdmin);
   });
 });
