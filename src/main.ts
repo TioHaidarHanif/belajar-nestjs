@@ -5,6 +5,14 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
+  // Enable CORS
+  app.enableCors({
+    origin: true, // Allow all origins in development
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-Id'],
+    credentials: true,
+  });
+  
   // Swagger configuration
   const config = new DocumentBuilder()
     .setTitle('NestJS Todo API')
