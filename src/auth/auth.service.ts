@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import {JwtService} from '@nestjs/jwt';
 import {LoginDto} from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Injectable()
 export class AuthService {
@@ -56,5 +57,36 @@ export class AuthService {
     }
     async logout(userId: number): Promise<void> {
         await this.userService.removeRefreshToken(userId);
+    }
+
+    async updateProfile(userId: number, updateProfileDto: UpdateProfileDto): Promise<any> {
+        const user = await this.userService.findById(userId);
+        if (!user) {
+            throw new UnauthorizedException('User not found');
+        }
+
+        // Check if username is being updated and if it already exists
+        if (updateProfileDto.username && updateProfileDto.username !== user.username) {
+            const existingUser = await this.userService.findByUsername(updateProfileDto.username);
+            if (existingUser) {
+                throw new UnauthorizedException('Username already exists');
+            }
+        }
+
+        // Hash password if it's being updated
+        const updateData: any = { ...updateProfileDto };
+        if (updateProfileDto.password) {
+            updateData.password = await bcrypt.hash(updateProfileDto.password, 10);
+        }
+
+        const updatedUser = await this.userService.update(userId, updateData);
+        
+        if (!updatedUser) {
+            throw new UnauthorizedException('Failed to update user');
+        }
+
+        // Remove sensitive fields from response
+        const { password, currentHashedRefreshToken, ...userResponse } = updatedUser as any;
+        return userResponse;
     }
 }

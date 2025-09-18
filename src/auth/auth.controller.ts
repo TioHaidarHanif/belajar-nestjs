@@ -1,7 +1,8 @@
-import {Controller, Post, Body, UseGuards, Get, Req} from '@nestjs/common';
+import {Controller, Post, Body, UseGuards, Get, Req, Put} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Counter } from 'prom-client';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
@@ -138,6 +139,30 @@ export class AuthController {
     getProfile(@Req() req) {
         authCounter.inc({ perintah: 'Lihat profil', status: 'success' });
         return { message: 'This is the user profile', user: req.user };
+    }
+
+    @ApiOperation({ summary: 'Update user profile' })
+    @ApiBearerAuth('JWT-auth')
+    @ApiResponse({ 
+        status: 200, 
+        description: 'User profile updated successfully',
+        schema: {
+            type: 'object',
+            properties: {
+                id: { type: 'number', example: 1 },
+                username: { type: 'string', example: 'john_doe_updated' },
+                email: { type: 'string', example: 'john.updated@example.com' },
+                role: { type: 'string', example: 'member' }
+            }
+        }
+    })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 400, description: 'Bad Request - Username already exists or invalid data' })
+    @UseGuards(AuthGuard('jwt'))
+    @Put('profile')
+    async updateProfile(@Req() req, @Body() updateProfileDto: UpdateProfileDto) {
+        // @ts-ignore
+        return this.authService.updateProfile(req.user.id, updateProfileDto);
     }
 
 }

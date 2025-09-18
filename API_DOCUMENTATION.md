@@ -37,10 +37,12 @@ Dokumentasi API lengkap telah berhasil dibuat menggunakan **Swagger/OpenAPI** un
 | `POST` | `/auth/logout` | User logout | ❌ |
 | `POST` | `/auth/protected` | Protected resource demo | ✅ JWT |
 | `GET` | `/auth/profile` | Get user profile | ✅ JWT |
+| `PUT` | `/auth/profile` | Update user profile | ✅ JWT |
 
 **DTOs:**
 - `LoginDto`: username, password
 - `RegisterDto`: username, password, email (optional)
+- `UpdateProfileDto`: username (optional), email (optional), password (optional)
 
 ### ✅ Todo Module (`/todos`)
 
@@ -186,7 +188,18 @@ curl -X POST http://localhost:3000/todos \
   }'
 ```
 
-### 4. Get All Articles
+### 4. Update User Profile (Authenticated)
+```bash
+curl -X PUT http://localhost:3000/auth/profile \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-jwt-token" \
+  -d '{
+    "username": "john_doe_updated",
+    "email": "john.updated@example.com"
+  }'
+```
+
+### 5. Get All Articles
 ```bash
 curl -X GET http://localhost:3000/articles
 ```
@@ -199,13 +212,14 @@ curl -X GET http://localhost:3000/articles
 ```
 src/
 ├── auth/dto/
-│   ├── login.dto.ts        # ✅ Swagger decorators added
-│   └── register.dto.ts     # ✅ Swagger decorators added
+│   ├── login.dto.ts           # ✅ Swagger decorators added
+│   ├── register.dto.ts        # ✅ Swagger decorators added
+│   └── update-profile.dto.ts  # ✅ New DTO for profile updates
 ├── todo/dto/
-│   └── todo.dto.ts         # ✅ New DTOs created
+│   └── todo.dto.ts            # ✅ New DTOs created
 ├── article/dto/
-│   └── article.dto.ts      # ✅ New DTOs created
-└── main.ts                 # ✅ Swagger configuration
+│   └── article.dto.ts         # ✅ New DTOs created
+└── main.ts                    # ✅ Swagger configuration
 ```
 
 ### Decorators Used:
